@@ -16,6 +16,12 @@ shasum -a 512 -c elasticsearch-oss-${ES_VERSION}.deb.sha512
 dpkg -i elasticsearch-oss-${ES_VERSION}.deb
 rm -f elasticsearch-oss-${ES_VERSION}.deb
 
+# Configure Elastic Search
+sed -i 's|#*cluster.name:.*|cluster.name: ES_01|g'   /etc/elasticsearch/elasticsearch.yml
+sed -i 's|#*node.name:.*|node.name: ES_01_Node_01|g' /etc/elasticsearch/elasticsearch.yml
+sed -i 's|#*network.host:.*|network.host: 0.0.0.0|g' /etc/elasticsearch/elasticsearch.yml
+sed -i 's|#*http.port:.*|http.port: 9200|g'          /etc/elasticsearch/elasticsearch.yml
+
 # Enable and start Elastic Search service
 systemctl daemon-reload
 systemctl enable elasticsearch.service
