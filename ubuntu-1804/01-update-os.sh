@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 
 # customable enviroment variables
-HOSTNAME=emaple-svr
+HOSTNAME=example-svr
 
 # fixed enviroment variables
 DEBIAN_FRONTEND=noninteractive
@@ -19,8 +19,8 @@ timedatectl set-timezone Asia/Ho_Chi_Minh
 apt update -y
 apt upgrade -y
 apt autoremove -y
-apt install -y git wget curl gcc g++ make
+apt install -y git wget curl gcc g++ make ca-certificates software-properties-common
 
 # firewall
 ufw allow ssh
-#ufw enable
+ufw enable
