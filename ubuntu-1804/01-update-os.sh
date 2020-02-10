@@ -19,8 +19,8 @@ timedatectl set-timezone Asia/Ho_Chi_Minh
 apt update -y
 apt upgrade -y
 apt autoremove -y
-apt install -y git wget curl gcc g++ make ca-certificates software-properties-common
+apt install -y git wget curl gcc g++ make ca-certificates software-properties-common gnupg-agent
 
 # firewall
-ufw allow ssh
+ufw allow from 192.168.1.0/24 to any port 22
 ufw enable

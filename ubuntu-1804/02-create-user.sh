@@ -19,3 +19,5 @@ chown -R $SSHUSER:dev /home/$SSHUSER/.ssh
 chmod 755 /home/$SSHUSER/.ssh
 find /home/$SSHUSER/.ssh -type d -exec chmod 755 {} \;
 find /home/$SSHUSER/.ssh -type f -exec chmod 600 {} \;
+
+echo "$SSHUSER = (ALL) NOPASSWD: ALL" > /etc/sudoers.d/$SSHUSER

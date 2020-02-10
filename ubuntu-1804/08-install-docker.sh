@@ -6,8 +6,6 @@ SSHUSER=oanhnn
 # fixed enviroment variables
 DEBIAN_FRONTEND=noninteractive
 
-apt install -y docker.io
-
 apt remove -y docker docker-engine docker.io containerd runc
 apt update -y
 apt install -y apt-transport-https \
@@ -22,6 +20,9 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(
 apt update -y
 apt install -y docker-ce docker-ce-cli containerd.io
 usermod -aG docker $SSHUSER
+
+curl -L "https://github.com/docker/compose/releases/download/1.25.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
 
 systemctl start docker
 systemctl enable docker
