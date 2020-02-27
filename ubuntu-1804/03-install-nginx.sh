@@ -1,11 +1,16 @@
 #!/bin/bash -ex
 
-# customable enviroment variables
-GITLABUSER=oanhnn
-SSHUSER=oanhnn
+# load environment variables
+if [[ -f .env ]]; then
+ source .env
+fi
+
+# fixed enviroment variables
+DEBIAN_FRONTEND=noninteractive
 
 # install NGINX
 apt install -y nginx
+
 systemctl enable nginx
 systemctl start nginx
 

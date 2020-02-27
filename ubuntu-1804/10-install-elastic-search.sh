@@ -1,6 +1,14 @@
 #!/bin/bash -ex
 
-ES_VERSION="6.7.0"
+# load environment variables
+if [[ -f .env ]]; then
+ source .env
+fi
+
+# fixed enviroment variables
+DEBIAN_FRONTEND=noninteractive
+SSH_USER=${SSH_USER:-"oanhnn"}
+ES_VERSION=${ES_VERSION:-"6.7.0"}
 
 # Install JavaSDK
 apt install openjdk-8-jdk

@@ -1,8 +1,27 @@
 #!/bin/bash -ex
 
+# load environment variables
+if [[ -f .env ]]; then
+ source .env
+fi
+
+# fixed enviroment variables
+DEBIAN_FRONTEND=noninteractive
+
 # install PHP7.2
 amazon-linux-extras install -y php7.2
-yum install -y php-bcmath php-cli php-fpm php-gd php-intl php-json php-mbstring php-mysqlnd php-opcache php-pdo php-pecl-zip php-xml
+yum install -y php-bcmath \
+    php-cli \
+    php-fpm \
+    php-gd \
+    php-intl \
+    php-json \
+    php-mbstring \
+    php-mysqlnd \
+    php-opcache \
+    php-pdo \
+    php-pecl-zip \
+    php-xml
 
 sed -i 's|;*expose_php=.*|expose_php=0|g' /etc/php.ini
 sed -i 's|;*memory_limit = 128M|memory_limit = 512M|g' /etc/php.ini
@@ -27,10 +46,13 @@ rm -f composer-setup.php
 
 # install some PECL packages
 yum install -y php-devel php-pear ImageMagick-devel ImageMagick
+
 pecl channel-update pecl.php.net
 pecl install imagick redis xdebug
 echo 'extension=imagick.so' > /etc/php.d/20-imagick.ini
 echo 'extension=redis.so' > /etc/php.d/20-redis.ini
+
 yum remove -y php-devel php-pear ImageMagick-devel
+
 systemctl start php-fpm
 systemctl enable php-fpm
