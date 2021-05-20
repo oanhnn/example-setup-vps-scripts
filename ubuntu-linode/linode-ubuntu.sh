@@ -87,7 +87,7 @@ fi
 systemctl restart sshd
 
 # setup docker
-if [[ "$FEATURE_DOCKER" -eq "yes" ]]
+if [ "$FEATURE_DOCKER" = 'yes' ]
 then
     curl -fsSL https://get.docker.com | bash -
     usermod -aG docker $SSH_USER
@@ -101,11 +101,11 @@ then
     curl -L https://raw.githubusercontent.com/docker/compose/${COMPOSE_VERSION}/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
 fi
 
-if [[ "$FEATURE_HTTP" -eq "yes" ]]
+if [ "$FEATURE_HTTP" = 'yes' ]
 then
     ufw allow http
 fi
-if [[ "$FEATURE_HTTPS" -eq "yes" ]]
+if [ "$FEATURE_HTTPS" = 'yes' ]
 then
     ufw allow https
 fi
