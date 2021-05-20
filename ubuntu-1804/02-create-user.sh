@@ -25,4 +25,4 @@ find /home/$SSH_USER/.ssh -type d -exec chmod 755 {} \;
 find /home/$SSH_USER/.ssh -type f -exec chmod 600 {} \;
 
 # sudo passless
-echo "$SSH_USER = (ALL) NOPASSWD: ALL" > /etc/sudoers.d/$SSH_USER
+echo "$SSH_USER ALL = (ALL) NOPASSWD: ALL" > /etc/sudoers.d/$SSH_USER
