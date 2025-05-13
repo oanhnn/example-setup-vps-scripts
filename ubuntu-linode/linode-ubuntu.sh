@@ -84,21 +84,37 @@ then
     # Allowed ssh users in /etc/ssh/sshd_config
     echo "AllowUsers $SSH_USER" >> /etc/ssh/sshd_config
 fi
-systemctl restart sshd
+systemctl restart ssh.service
 
 # setup docker
 if [[ "$FEATURE_DOCKER" -eq "yes" ]]
-then
-    curl -fsSL https://get.docker.com | bash -
+then    
+    ## Install docker
+    #curl -fsSL https://get.docker.com | bash -
+    ## get latest docker compose released tag
+    #COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)
+    ## Install docker-compose
+    #curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+    #chmod +x /usr/local/bin/docker-compose
+    #curl -L https://raw.githubusercontent.com/docker/compose/${COMPOSE_VERSION}/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
+
+    # Add Docker's official GPG key:
+    install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add the repository to Apt sources:
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+    apt update -y
+    apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+    # Add user to docker group
     usermod -aG docker $SSH_USER
-    systemctl start docker
-    systemctl enable docker
-    # get latest docker compose released tag
-    COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)
-    # Install docker-compose
-    curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-    chmod +x /usr/local/bin/docker-compose
-    curl -L https://raw.githubusercontent.com/docker/compose/${COMPOSE_VERSION}/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
+
+    # Enable services
+    systemctl enable docker.service
+    systemctl enable containerd.service
+
 fi
 
 if [[ "$FEATURE_HTTP" -eq "yes" ]]
